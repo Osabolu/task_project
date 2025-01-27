@@ -1,0 +1,19 @@
+{% extends "partials/base.html" %}
+
+{% load static %}
+
+{% block title %}Confirm Delete Task{% endblock title %}
+
+{% block body %}
+
+<div class="confirm-task">
+    <h1>{{ task.title }}</h1>
+    <span class="task-description"><h3>Are you sure you want to delete this task?</h3></span>
+    <form action="{% url 'task_app:delete_task' task.id %}" method="POST">
+        {% csrf_token %}
+        <button type="submit" class="confirm-btn">Yes, Delete</button>
+        <a href="{% url 'task_app:dashboard' %}" class="cancel-btn">No, cancel</a>
+    </form>
+</div>
+
+{% endblock body %}

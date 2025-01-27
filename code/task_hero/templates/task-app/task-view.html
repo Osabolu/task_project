@@ -1,0 +1,27 @@
+
+{% extends "partials/base.html" %}
+
+{% load static %}
+
+{% block title %}dashboard{% endblock title %}
+
+{% block body %}
+ <div class="view-btn">
+            <ul>
+                <h2 style="color: green;background-color: wheat;border-radius: 5px;padding: 0 5px 5px 0;margin-right: 50px;">Overdue Task
+                {% for task in tasks %}
+                    {{ task }}
+                    {% if task.task_todo %}
+                        <li>
+                            <strong class="list-view">{{ task.title.to_do }},</strong>
+                            <strong class="list-view">Due: {{ task.due_date }}</strong>
+                            {% comment %} <a href="{% url 'task_app:confirm_delete_task' task.id %}" class="delete-button">Delete</a> {% endcomment %}
+                            {% comment %} <a href="{% url 'task_app:task_detail' task.id %}" class="review-button">View detail</a> {% endcomment %}
+                        </li>
+                    {% endif %}
+                {% endfor %}
+                </h2>
+            </ul>
+        </div>
+
+{% endblock body %}

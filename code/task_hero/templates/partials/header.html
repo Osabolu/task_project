@@ -1,0 +1,17 @@
+{% load static %}
+<header class ="top_logo"><a href="{% url 'task_app:home' %}">ChoreChampion</a></header>
+
+
+    <div class="greeting" id="timeGreeting">
+        <h2>{{ greeting }} </h2>
+        {% if time_of_day == 'morning' %}
+            <img src="{% static 'images/sunset.jpg' %}" alt="Morning Image">
+        {% elif time_of_day == 'day' %}
+            <img src="{% static 'images/sun2.jpg' %}" alt="Sun Image">
+        {% elif time_of_day == 'night' %}
+            <img src="{% static 'images/half_moon.jpg' %}" alt="Moon Image">
+        {% elif time_of_day == 'Late night' %}
+            <img src="{% static 'images/moon2.jpg' %}" alt="Moon ">
+        {% endif %}
+    </div>
+

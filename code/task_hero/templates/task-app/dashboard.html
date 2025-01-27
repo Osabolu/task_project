@@ -1,0 +1,188 @@
+{% extends "partials/base.html" %}
+
+{% load static %}
+
+{% block title %}dashboard{% endblock title %}
+
+{% block body %}
+
+    <div class="popup hidden">
+        <button id="close">&times</button>
+        <h1>Task</h1>
+        <p class="note">You have overdue Task(s). Please review</p>
+            <ul>
+                <h1 style="color: Red;background-color: wheat;">Overdue Task(s)</h1>
+                {% for task in tasks %}
+                    {% if task.is_overdue_and_incomplete %}
+                        <li>
+                            <strong class="list-xdate">Title: {{ task.title }}</strong><br>
+                            <strong class="list-xdate">Priority: {{ task.priority }}</strong><br>
+                            <strong class="list-xdate">Due: {{ task.due_date }}</strong><br>
+                        </li>
+                    {% endif %}
+                {% endfor %}
+            </ul>
+    </div>
+<section class="body">
+    <div class="dashboard-container">
+        <div class="theme-toggle">
+            <label class="switch">
+                <input type="checkbox" id="themeToggle">
+                <span class="slider"></span>
+            </label>
+            <span id="themeLabel">Light Mode</span>
+        </div>
+
+        <h1>Dashboard</h1>
+        <div class="cards-container">
+            <div class="card">
+            {% for task  in to_do.tasks %}
+            {{ task }}
+            {% for task in tasks_todo %}
+            {{ task }}
+            
+            {% endfor %}
+            
+            {% endfor %}
+                <h3>ToDo</h3>
+                <p>{{ tasks_by_status.to_do }}</p>
+                <ul> 
+                    {% for task in tasks_todo.to_do  %}
+                        <li><p><a href="{% url 'task_app:task_detail' task.id %}">{{ task }}</a></p></li>
+                    {% endfor %}
+                </ul>
+
+
+            </div>
+            <div class="card">
+                <h3>InProgress</h3>
+                <p>{{ tasks_by_status.in_progress }}</p>
+                <ul>    
+                    {% for task in tasks_todo.in_progress  %}
+                        <li><p><a href="{% url 'task_app:task_detail' task.id %}">{{ task }}</a></p></li>
+
+                    {% endfor %}
+                </ul>
+ 
+                {% comment %} {%comment %} <b>{{ tasks_todo.in_progress }}</b> {% endcomment %}
+
+            </div>
+            <div class="card">
+                <h3>Completed</h3>
+                <p>{{ tasks_by_status.completed }}</p>
+                <ul>
+                    {% for task in tasks_todo.completed  %}
+                        <li><b><a href="{% url 'task_app:task_detail' task.id %}">{{ task }}</a></b></li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+
+        <!-- Upcoming Tasks List -->
+        <div class="upcoming-tasks">
+            <h1>Upcoming Task</h1>
+            <ul>
+                {% for task in upcoming_tasks %}
+                    <li>
+                        <strong class="text-title">{{ task.title }}</strong> - <b><u>Due: {{ task.due_date }}</u></b>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <form action="{% url 'task_app:dashboard' %}" method="POST">
+            {% csrf_token %}
+            {{ form.as_p}}
+        </form>
+        <div class="overdue-btn">
+            <ul>
+                <h1 style="color: Red;background-color: wheat;border-radius: 5px;padding: 0 5px 5px 0;margin-right: 50px;">Overdue Task
+                {% for task in tasks %}
+                    {% if task.is_overdue_and_incomplete %}
+                        <li>
+                            <strong class="list-duedate">{{ task.title }},</strong>
+                            <strong class="list-duedate">Due: {{ task.due_date }}</strong>
+                            <a href="{% url 'task_app:confirm_delete_task' task.id %}" class="delete-button">Delete</a>
+                            <a href="{% url 'task_app:task_detail' task.id %}" class="review-button">View detail</a>
+                        </li>
+                    {% endif %}
+                {% endfor %}
+                </h1>
+            </ul>
+        </div>
+            <audio id="overdueAlert" src="{% static 'audio/airport_note.mp3' %}" preload="auto"></audio>
+
+            <h1>Task</h1>
+            <div id="taskContainer" class="tasks-container {% if task.is_overdue_and_incomplete %}overdue{% endif %} ">
+                {% for task in tasks %}   
+                    <div class="tasks-card {% if task.is_overdue_and_incomplete %}overdue{% endif %}" data-priority="{{ task.priority }}">
+                            <a class= "detail-view" href="{% url 'task_app:task_detail' task.id %}"><h3>{{ task.title }}</h3></a>
+                            <p><strong>Description:</strong> {{ task.description }}</p>
+                            <p><strong>Due Date:</strong> {{ task.due_date }}</p>
+                            <p class="priority-labels"><strong>Priority:</strong> {{ task.get_priority_display }}</p>
+                            <p><strong>Status:</strong> {{ task.get_status_display }}</p>
+                            <a href="{% url 'task_app:confirm_delete_task' task.id %}" class="delete-button">Delete</a>
+                            {% comment %} <a href="{% url 'task_app:task_detail' task.id %}" class="detail-button">View detail</a> {% endcomment %}
+                        </li>
+                    </div>
+                {% endfor %}  
+            </ul>
+        </div>
+    </div>
+</section>
+{% endblock body %}
+
+
+<script>
+    // Chart.js - Task Status Chart
+    const ctx = document.getElementById('taskStatusChart').getContext('3d');
+    const taskStatusChart = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels: ['To Do', 'In Progress', 'Completed'],
+            datasets: [{
+                label: 'Task Status',
+                data: [
+                    {{ tasks_by_status.to_do }},
+                    {{ tasks_by_status.in_progress }},
+                    {{ tasks_by_status.completed }}
+                ],
+                backgroundColor: ['#d9534f', '#f0ad4e', '#5cb85c'],
+                borderWidth: 3
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'bottom'
+                }
+            }
+        }
+    });
+
+</script>
+
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const overdueTasks = document.querySelectorAll(".tasks-card.overdue");
+    const alertTone = document.getElementById("overdueAlert");
+    
+    if (overdueTasks.length > 0) {
+        alertTone.play().catch(() => {
+            // Alert the user if autoplay is blocked
+            alert("You have overdue tasks! Enable audio playback to hear the alert.");
+        });
+    }
+});
+
+</script>
+
+
+
+
+
+
+
+

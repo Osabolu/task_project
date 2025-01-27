@@ -1,0 +1,131 @@
+{% extends "partials/base.html" %}
+
+{% load static %}
+
+{% block title %}Home page{% endblock title %}
+
+{% block body %}
+    <header>
+        {% comment %} <a href="{% url 'task_app:home' %}" class="brand">ChoreChampion</a> {% endcomment %}
+        <div class="navbar">
+            <div class="navbar-options">
+                <a href="{% url 'task_app:dashboard' %}">Dashboard</a>
+                <a href="{% url 'task_app:add_task' %}">Add Task</a>
+                <a href="#">About-us</a>
+            </div>
+        </div>
+         <div class="menu-btn">
+            {% comment %} <a href="#"><i class="fa-solid fa-bars" style="color: #ffffff;"></i></a> {% endcomment %}
+        </div>
+            </a>
+        </div>
+
+    </header>
+
+    <section class="home">
+        <video class="slide-1 active" src="{% static 'images/bike ride.mp4' %}" autoplay muted loop></video>
+        <video class="slide-1" src="{% static 'images/coaster.mp4' %}" autoplay muted loop></video>
+        <video class="slide-1" src="{% static 'images/scuba.mp4' %}" autoplay muted loop></video>
+        
+
+        <div class="content active">
+            <h1>JOIN CHORECHAMPION</h1>
+            <p>Say goodbye to overwhelm and hello to clarity! <br>ChoreChampion, designed for achievers.</p>
+            {% comment %} <a href="{% url 'authentication:sign_up' %}">sign up</a> {% endcomment %}
+        </div>
+      
+         <div class="content">
+            <h1>Supercharge</h1>
+            <p>Get ready to conquer your day with confidence and clarity!</p>
+            <a href="#">read more</a>
+        </div> <div class="content">
+            <h1>Feel free...<br></h1>
+            <p>ChoreChampion ensures you stay organized, focused, and ready to tackle your day.</p>
+            <a href="#">read more</a>
+        </div>
+        <div class="content">
+            <h1>...keeps track</span></h1>
+            <p>Join the thousands who have transformed their productivity with ChoreChampion.</p>
+            <a href="#">read more</a>
+        </div>
+        <div class="content">
+            <h1>Need time to relax?</h1>
+            <p>...experience that adapts to your needs</p>
+
+            <a href="#">read more</a>
+        </div>
+        <div class="content">
+            <h1>Reliable...</h1>
+            <p>the top-notch to-do app designed to streamline your life</p>
+            <a href="#">read more</a>
+        </div>
+        <div class="content">
+            <u>Key Features</u>
+                    
+            <p> Smart Categorization: Organize tasks by projects,</p> 
+                     
+                        
+            <p>Notifications: Never miss a deadline again</p>
+             
+             
+            <p>Cross-Platform : Access your tasks anytime</p> 
+             
+            
+            <a href="#">read more</a>
+        </div>
+        
+        <div class="media-icons">
+            <a href="#"><i class="fab fa-facebook-f fb"></i></a>
+            <a href="#"><i class="fab fa-instagram instagram"></i></a>
+            <a href="#"><i class="fab fa-twitter twitter"></i></a>
+        </div>
+        <div class="slider-navbar">
+            <div class="nav-btn active"></div>
+       
+        </div>
+    </section>
+  
+{% endblock body %}
+
+{% block scripts %}
+<script src="{% static 'js/to-do.js' %}">
+const menuBtn = document.querySelector(".menu-btn");
+const navbar = document.querySelector(".navbar");
+
+
+
+menuBtn.addEventListener("click", () => {
+    menuBtn.classList.toggle("active");
+    navbar.classList.toggle("active");
+
+});
+
+const btns = document.querySelectorAll(".nav-btn");
+const slides = document.querySelectorAll(".slide-1");
+const contents = document.querySelectorAll(".content");
+
+var sliderNav = function(manual){
+    btns.forEach((btn) => {
+        btn.classList.remove("active");
+    });
+
+    slides.forEach((slide) => {
+        slide.classList.remove("active");
+    });
+
+    contents.forEach((content) => {
+        content.classList.remove("active");
+    });
+
+    btns[manual].classList.add("active");
+    slides[manual].classList.add("active");
+    contents[manual].classList.add("active");
+}
+
+btns.forEach((btn, i) => {
+    btn.addEventListener("click", () => {
+        sliderNav(i);
+    });
+});
+</script>
+{% endblock scripts %}

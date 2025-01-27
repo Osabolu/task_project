@@ -1,0 +1,108 @@
+{% extends "partials/base.html" %}
+
+{% load static %}
+
+{% block title %}Task Form{% endblock title %}
+
+{% block body %}
+
+<div class="background">
+    <div class="intro-container">
+        <p id="choreChampionIntro" class="animated-text">
+            <span class="quote-mark">“</span>ChoreChampion is your ultimate to-do app, <br>designed to turn everyday chores into simple, <br>achievable goals. Get organized, <br>stay motivated, and conquer your tasks with ease!<span class="quote-mark">”</span>
+        </p>
+   
+    </div>
+    <form action="{% url 'task_app:add_task' %}" method="POST">
+        {% csrf_token %}
+            <form action="{% url 'task_app:add_task' %}" method="POST">
+        {% csrf_token %}
+        <div class="form-container">
+            <h3>Add Task</h3>
+
+            <div class="form-group">
+                {{ form.title.label_tag }}
+                {{ form.title }}
+                {% if form.title.errors %}
+                    <span class="error">{{ form.title.errors }}</span>
+                {% endif %}
+            </div>
+
+            <div class="form-group">
+                <label for="description">Task Description</label>
+                <textarea id="description" name="description"  placeholder="Enter task description"></textarea>
+                {% if form.description.errors %}
+                    <span class="error">{{ form.title.errors }}</span>
+                {% endif %}
+
+            </div>
+
+            <div class="form-group">
+                {{ form.due_date.label_tag }}
+                <input type="datetime-local" name="due_date" required>
+                {% if form.due_date.errors %}
+                    <span class="error">{{ form.due_date.errors }}</span>
+                {% endif %}
+            </div>
+
+            <div class="form-group">
+                {{ form.status.label_tag }}
+                {{ form.status }}
+            </div>
+
+            <div class="form-group">
+                {{ form.priority.label_tag }}
+                {{ form.priority }}
+            </div>
+
+            {% if form.errors %}
+                <div class="errors">
+                    <ul>
+                        {% for field in form %}
+                            {% for error in field.errors %}
+                                <li>{{ error }}</li>
+                            {% endfor %}
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endif %}
+
+            <button type="submit" class="submit-button">Add Task</button>
+        </div>
+    </form>
+</div>
+
+
+{% endblock body %}
+
+<script src="{% static 'js/to-do.js' %}"></script>
+
+
+<script>
+    // Client-side validation
+    document.querySelector("form").addEventListener("submit", function (e) {
+        let isValid = true;
+
+        // Validate title
+        const title = document.querySelector("#id_title");
+        if (!title.value.trim()) {
+            alert("Task title is required!");
+            isValid = false;
+        }
+
+        // Validate due date
+        const dueDate = document.querySelector("#id_due_date");
+        if (!dueDate.value) {
+            alert("Please select a due date!");
+            isValid = false;
+        }
+
+        if (!isValid) e.preventDefault();
+    });
+</script>
+
+
+
+
+
+

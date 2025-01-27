@@ -1,0 +1,42 @@
+{% extends "partials/base.html" %}
+
+{% load static %}
+{% block title %}Sign Up{% endblock title %}
+
+{% block body %}
+<div class="form-signup"> 
+    {% comment %} <video class="slide-1" src="{% static 'images/manual.mp4' %}" autoplay muted loop></video> {% endcomment %}
+    <form action="{% url 'authentication:sign_up' %}" method="POST">
+            {% csrf_token %}
+        <div class="form-log">
+                <br>
+                <div class="form-forms">
+                    <i class="fa-solid fa-user" style="color: #ebedef;"></i>
+                    <label for="username">Username</label>
+                    <input type="text" name="username" placeholder="Enter username" required>
+                </div>
+                <div class="form-forms">
+                    <i class="fa-solid fa-unlock" style="color: #e3e5e8;"></i>
+                    <label for="password1">Password</label>
+                    <input type="password" name="password1" placeholder="Enter password" required>
+                    <i class='bx bx-hide eye-icon'></i>
+                </div>
+                <div class="form-forms">
+                    <i class="fa-solid fa-unlock" style="color: #e3e5e8;"></i>
+                    <label for="password2">Confirm Password</label>
+                    <input type="password" name="password2" placeholder="Confirm password" required>
+                    <i class='bx bx-hide eye-icon'></i>
+                </div>
+                <button type="submit">Sign up</button>
+                <p>Already have an account?<a href="{% url 'authentication:login' %}"><u>Login</u></a></p>
+                <h4>or use alternate options</h4>
+                <div class="icons-i">
+                    <strong><i class="fa-brands fa-facebook fa"></i></strong>
+                    <strong><i class="fa-brands fa-apple apple"></i></strong>
+                    <strong><i class="fa-brands fa-linkedin linked"></i></strong>
+                    <strong><i class="fa-brands fa-yahoo yahoo"></i></strong>
+                </div>
+        </div>
+    </form>
+</div>
+{% endblock body %}

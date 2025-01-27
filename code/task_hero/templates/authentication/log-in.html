@@ -1,0 +1,36 @@
+{% extends "partials/base.html" %}
+{% load static %}
+
+{% block title %}Log In{% endblock title %}
+
+{% block body %}
+<div class="cover">
+    <div class="formcov">
+        <form action="{% url 'authentication:login' %}" method="POST">
+            {% csrf_token %}
+            
+            <div class="form-content">
+                <h1>Login</h1>
+                <hr>
+                <br>
+                <div class="forms">
+                    <i class="fa-solid fa-user fa" style="color: #ebedef;"></i>
+                    <label for="username">Username</label>
+                    <input type="text" name="username" placeholder="Enter username" required>
+                    {% comment %} <span class="error" >Title is required</span> {% endcomment %}
+                </div>
+
+                <div class="forms">
+                    <i class="fa-solid fa-unlock fa" style="color:rgb(250, 250, 251);"></i>
+                    <label for="password">Password</label>
+                    <input type="password" name="password" placeholder="Enter password" required>
+                    <i class='bx bx-hide eye-icon'></i>
+                </div>
+                <button type="submit">Log In</button>
+                <p>Don't have an account?<a href="{% url 'authentication:sign_up' %}"><u>Sign Up</u></a></p>
+       
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock body %}

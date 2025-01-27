@@ -1,0 +1,34 @@
+{% extends "partials/base.html" %}
+{% load static %}
+
+{% block  title%}{{ task.title }}{% endblock  %}
+{% block body %}
+<body>
+<section class="task-background">
+    <div class="task-detail-container">
+        <h1>Task Detail</h1>
+        <form action="{% url 'task_app:task_detail' task.id %}" method="POST">
+            {% csrf_token %}
+             {{ form.as_p}}
+            <div class="task-card" id="taskCard">
+                <h2>{{ task.title }}</h2>
+                <p><strong>Title: </strong><span>{{ task.title }}</span></p>
+                <p><strong>Description:</strong> <span>{{ task.description}}</span></p>
+                <p><strong>Due date:</strong> <span>{{ task.due_date}}</span></p>
+                <p><strong>Priority:</strong> <span>{{ task.priority}}</span></p>
+                <p><strong>Status:</strong> <span class="priority-label">{{task.status}}</span></p>
+                <a href="{% url 'task_app:dashboard' %}">Go back</a>
+                <a href="{% url 'task_app:update_task' task.id %}">Update</a>
+                <a href="{% url 'task_app:add_task' %}">Add more</a>                
+            </div>
+        </form>
+    </div>
+</section>   
+    {% comment %} <script src="scripts.js"></script> {% endcomment %}
+</body>
+
+{% endblock body %}
+
+<script src="{% static 'js/to-do.js' %}"></script>
+
+
